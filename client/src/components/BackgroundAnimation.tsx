@@ -30,17 +30,6 @@ function getChordColors(voicing: ChordVoicing | null) {
   return colors[voicing.quality] || colors.major;
 }
 
-function getRainbowColors(voicing: ChordVoicing | null) {
-  if (!voicing) return ["hsl(270, 100%, 65%, 0.25)", "hsl(200, 100%, 65%, 0.25)"];
-  // Derive hue from root note (0–11 → 0°–330°)
-  const rootHue = (voicing.root % 12) * 30;
-  const secondHue = (rootHue + 60) % 360;
-  return [
-    `hsl(${rootHue}, 100%, 65%, 0.25)`,
-    `hsl(${secondHue}, 100%, 65%, 0.25)`,
-  ];
-}
-
 function generateParticles(count: number): ParticleProps[] {
   return Array.from({ length: count }, () => ({
     x: Math.random() * window.innerWidth,
@@ -54,10 +43,7 @@ export default function BackgroundAnimation({ voicing }: BackgroundAnimationProp
   const { settings } = useSettings();
   const [particles, setParticles] = useState<ParticleProps[]>([]);
 
-  const colors =
-    settings.colorMode === "rainbow"
-      ? getRainbowColors(voicing)
-      : getChordColors(voicing);
+  const colors = getChordColors(voicing);
 
   useEffect(() => {
     setParticles(generateParticles(20));

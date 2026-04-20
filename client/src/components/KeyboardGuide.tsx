@@ -19,13 +19,13 @@ interface KeyHintProps {
 function KeyHint({ keyLabel, description, isActive }: KeyHintProps) {
   return (
     <div className="flex-1 flex flex-col justify-center items-center gap-2 min-w-[100px]">
-      <span className="text-sm text-gray-600">{description}</span>
+      <span className="text-sm text-muted-foreground">{description}</span>
       <div
         className={`w-10 h-10 flex items-center justify-center rounded-lg text-lg transition-colors duration-150
           ${
             isActive
-              ? "bg-stone-500 text-white hover:bg-stone-300 hover:text-gray-900" // Lighter on hover for active
-              : "bg-transparent border border-stone-500/20 text-gray-900 hover:bg-stone-300" // Brighter on hover for inactive
+              ? "bg-primary text-primary-foreground"
+              : "bg-transparent border border-border text-foreground hover:bg-accent/20"
           }`}
       >
         {keyLabel}

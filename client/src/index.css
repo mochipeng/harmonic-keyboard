@@ -27,8 +27,16 @@
   [data-theme="dark"] {
     --background: 220 15% 8%;
     --foreground: 0 0% 93%;
+    --card: 220 15% 12%;
+    --card-foreground: 0 0% 93%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 0 0% 65%;
     --accent: 220 15% 30%;
     --accent-foreground: 0 0% 93%;
+    --border: 220 15% 22%;
+    --input: 220 15% 22%;
+    --primary: 250 70% 65%;
+    --primary-foreground: 0 0% 100%;
     --header-bg: 220 15% 11%;
     --piano-white-key: 220 10% 22%;
     --piano-white-key-hover: 220 10% 32%;
@@ -40,8 +48,16 @@
   [data-theme="pink"] {
     --background: 340 60% 96%;
     --foreground: 340 30% 20%;
+    --card: 340 50% 92%;
+    --card-foreground: 340 30% 20%;
+    --muted: 340 40% 88%;
+    --muted-foreground: 340 25% 45%;
+    --primary: 330 80% 55%;
+    --primary-foreground: 0 0% 100%;
     --accent: 330 50% 70%;
     --accent-foreground: 340 30% 20%;
+    --border: 330 40% 82%;
+    --input: 330 40% 82%;
     --header-bg: 340 50% 93%;
     --piano-white-key: 340 60% 93%;
     --piano-white-key-hover: 330 60% 85%;
@@ -51,14 +67,11 @@
   }
 
   [data-theme="rainbow"] {
-    --background: 260 30% 8%;
-    --foreground: 0 0% 97%;
-    --accent: 280 60% 50%;
-    --accent-foreground: 0 0% 97%;
-    --header-bg: 260 30% 11%;
-    /* Piano key colors are set per-note via inline styles in rainbow mode */
-    --piano-white-key: 0 0% 100%;
-    --piano-black-key: 0 0% 10%;
-    --piano-active-key: 60 100% 60%;
+    /* Same as light mode — only piano keys change (handled in JS) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --accent: 60 4.8% 41.8%;
+    --accent-foreground: 0 0% 100%;
+    --header-bg: 0 0% 98%;
   }
 }
