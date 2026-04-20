@@ -27,6 +27,66 @@ const SheetMusic: FC = () => {
         {/* Sheet Music Text Content */}
         <div className="h-[600px] overflow-y-auto border rounded-lg shadow-sm p-8 bg-white">
           <pre className="text-center font-mono whitespace-pre-wrap text-gray-900 [&>h2]:text-xl [&>h2]:font-semibold [&>h2]:text-stone-800 [&>h2]:my-6">
+<h2>Easy Difficulty: Pink Pony Club by Chappell Roan</h2>
+
+
+  B               N
+I know you wanted me to stay
+       C                            Z
+But I can't ignore the crazy visions of me in LA
+   B               N
+And I heard that there's a special place
+       C                            Z
+Where boys and girls can all be queens every single day
+
+ B
+I'm having wicked dreams
+      N
+of leaving Tennessee
+  C
+Oh, Santa Monica
+        Z
+Is where it's calling me
+ B
+Won't make my mama proud
+      N
+It's gonna cause a scene
+  C
+She sees her baby girl
+        Z
+And oh she's gonna scream
+
+   B         N
+God, what have you done
+  C
+You're a pink pony girl
+        Z
+And you dance at the club
+   B         N
+Oh mama, I'm just having fun
+  C
+On the stage in my heels
+        Z
+It's where I belong down at the
+
+ B         N
+Pink Pony Club
+  C
+I'm gonna keep on dancing
+        Z
+at the Pink Pony Club
+ B
+I'm gonna keep on dancing down in
+      N
+West Hollywood
+  C
+I'm gonna keep on dancing
+        Z
+at the Pink Pony Club
+ Z
+Pink Pony Club
+
+
 <h2>Easy Difficulty: Good Luck Babe by Chappell Roan</h2>
 
 
