@@ -119,62 +119,6 @@ I said something wrong
 
 Now I long for yesterday`;
 
-const pink_pony_club_tab = `  B               N
-I know you wanted me to stay
-       C                            Z
-But I can't ignore the crazy visions of me in LA
-   B               N
-And I heard that there's a special place
-       C                            Z
-Where boys and girls can all be queens every single day
-
- B
-I'm having wicked dreams
-      N
-of leaving Tennessee
-  C
-Oh, Santa Monica
-        Z
-Is where it's calling me
- B
-Won't make my mama proud
-      N
-It's gonna cause a scene
-  C
-She sees her baby girl
-        Z
-And oh she's gonna scream
-
-   B         N
-God, what have you done
-  C
-You're a pink pony girl
-        Z
-And you dance at the club
-   B         N
-Oh mama, I'm just having fun
-  C
-On the stage in my heels
-        Z
-It's where I belong down at the
-
- B         N
-Pink Pony Club
-  C
-I'm gonna keep on dancing
-        Z
-at the Pink Pony Club
- B
-I'm gonna keep on dancing down in
-      N
-West Hollywood
-  C
-I'm gonna keep on dancing
-        Z
-at the Pink Pony Club
- Z
-Pink Pony Club`;
-
 const when_you_wish_tab = `                    Z        NE    X5  X Z3   
 
 When you wish upon a star
@@ -197,9 +141,6 @@ const SheetMusicPanel: FC<SheetMusicPanelProps> = ({ onClose }) => {
     .split("\n")
     .filter((line) => line.trim() !== "");
   const yesterdayLines = yesterday_tab
-    .split("\n")
-    .filter((line) => line.trim() !== "");
-  const pinkPonyLines = pink_pony_club_tab
     .split("\n")
     .filter((line) => line.trim() !== "");
   const wishLines = when_you_wish_tab
@@ -241,24 +182,6 @@ const SheetMusicPanel: FC<SheetMusicPanelProps> = ({ onClose }) => {
               </h3>
               <div className="space-y-1">
                 {yesterdayLines.map((line, i) => (
-                  <div
-                    key={i}
-                    className={i % 2 === 0 ? "text-left" : "text-center"}
-                  >
-                    {line}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold text-stone-800 text-center">
-                Pink Pony Club by Chappell Roan
-              </h2>
-              <h3 className="text-lg font-medium text-stone-600 text-center mb-6">
-                Easy Difficulty
-              </h3>
-              <div className="space-y-1">
-                {pinkPonyLines.map((line, i) => (
                   <div
                     key={i}
                     className={i % 2 === 0 ? "text-left" : "text-center"}
