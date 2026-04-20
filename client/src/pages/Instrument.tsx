@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import ChordDisplay from "@/components/ChordDisplay";
 import KeyboardGuide from "@/components/KeyboardGuide";
 import DrumMachine from "@/components/DrumMachine";
+import SustainButton from "@/components/SustainButton";
 import {
   generateVoicingFromKeyState,
   handleKeyPress,
   handleKeyRelease,
 } from "@/lib/keyboardMapping";
-import { initAudio, playChord, type SynthSettings } from "@/lib/audio";
+import { initAudio, playChord, getSustain, releaseAll, type SynthSettings } from "@/lib/audio";
 import type { ChordVoicing } from "@shared/schema";
 import { generateVoicing } from "@/lib/voiceLeading";
 import type { InstrumentType } from "@/components/InstrumentSwitcher";
@@ -28,6 +29,7 @@ export default function Instrument({
   const [currentVoicing, setCurrentVoicing] = useState<ChordVoicing | null>(null);
   const [prevVoicing, setPrevVoicing] = useState<ChordVoicing | null>(null);
   const [isAudioInitialized, setIsAudioInitialized] = useState(false);
+  const [sustain, setSustain] = useState(getSustain());
 
   const initializeAudio = async () => {
     if (!isAudioInitialized) {
@@ -97,10 +99,14 @@ export default function Instrument({
     };
 
     const onKeyUp = (e: KeyboardEvent) => {
-      if (handleKeyRelease(e)) {
+      const allKeysReleased = handleKeyRelease(e);
+      if (allKeysReleased) {
         if (updateTimeout) clearTimeout(updateTimeout);
-        playChord(null);
-        setCurrentVoicing(null);
+        // Only release notes if sustain is off
+        if (!getSustain()) {
+          playChord(null);
+          setCurrentVoicing(null);
+        }
       } else {
         updateVoicing();
       }
@@ -136,6 +142,12 @@ export default function Instrument({
               }`}
             >
               <KeyboardGuide activeVoicing={currentVoicing} />
+            </div>
+            <div className="flex justify-center mt-4">
+              <SustainButton
+                sustain={sustain}
+                onToggle={setSustain}
+              />
             </div>
           </>
         ) : (

@@ -332,11 +332,20 @@ export function updateSynthSettings(settings: Partial<SynthSettings>): void {
   }
 }
 
-export function playChord(voicing: ChordVoicing | null) {
+export function playChord(voicing: ChordVoicing | null, forceRelease = false) {
   if (!synth) return;
 
-  // Stop all currently playing notes
-  synth.releaseAll();
+  // Store the voicing for sustain mode
+  if (voicing) {
+    lastVoicing = voicing;
+  }
+
+  // When sustain is enabled:
+  // - Don't release previous notes when playing new ones
+  // - Only release when sustain is toggled off or forceRelease is true
+  if (!sustainEnabled || forceRelease) {
+    synth.releaseAll();
+  }
 
   // If no voicing is provided or no notes to play, return
   if (!voicing || !voicing.notes.length) {
@@ -350,6 +359,28 @@ export function playChord(voicing: ChordVoicing | null) {
 
   // Play the new notes
   synth.triggerAttack(frequencies);
+}
+
+// Sustain/pedal state
+let sustainEnabled = false;
+let lastVoicing: ChordVoicing | null = null;
+
+export function setSustain(enabled: boolean): void {
+  sustainEnabled = enabled;
+  if (!enabled && synth) {
+    // Release all notes when sustain is turned off
+    synth.releaseAll();
+  }
+}
+
+export function getSustain(): boolean {
+  return sustainEnabled;
+}
+
+export function releaseAll(): void {
+  if (synth) {
+    synth.releaseAll();
+  }
 }
 
 export type { SynthSettings };
