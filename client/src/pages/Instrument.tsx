@@ -3,6 +3,7 @@ import ChordDisplay from "@/components/ChordDisplay";
 import KeyboardGuide from "@/components/KeyboardGuide";
 import DrumMachine from "@/components/DrumMachine";
 import SustainButton from "@/components/SustainButton";
+import ChordPresets from "@/components/ChordPresets";
 import {
   generateVoicingFromKeyState,
   handleKeyPress,
@@ -148,6 +149,9 @@ export default function Instrument({
                 sustain={sustain}
                 onToggle={setSustain}
               />
+            </div>
+            <div className="flex justify-center mt-4">
+              <ChordPresets />
             </div>
           </>
         ) : (
