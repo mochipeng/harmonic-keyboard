@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ChordVoicing } from "@shared/schema";
+import { useSettings } from "@/hooks/useSettings";
 
 interface BackgroundAnimationProps {
   voicing: ChordVoicing | null;
@@ -14,19 +15,30 @@ interface ParticleProps {
 }
 
 function getChordColors(voicing: ChordVoicing | null) {
-  if (!voicing) return ["hsl(250, 95%, 60%, 0.2)"]; // Default purple
+  if (!voicing) return ["hsl(250, 95%, 60%, 0.2)"];
 
   const colors = {
-    major: ["hsl(45, 100%, 60%, 0.2)", "hsl(30, 100%, 60%, 0.2)"], // Warm yellows
-    minor: ["hsl(220, 100%, 60%, 0.2)", "hsl(250, 100%, 60%, 0.2)"], // Cool blues
-    dominant7: ["hsl(280, 100%, 60%, 0.2)", "hsl(320, 100%, 60%, 0.2)"], // Rich purples
-    diminished7: ["hsl(0, 100%, 60%, 0.2)", "hsl(350, 100%, 60%, 0.2)"], // Deep reds
-    halfdiminished7: ["hsl(300, 100%, 60%, 0.2)", "hsl(330, 100%, 60%, 0.2)"], // Burgundy
-    minor7: ["hsl(200, 100%, 60%, 0.2)", "hsl(230, 100%, 60%, 0.2)"], // Deep blues
-    major7: ["hsl(60, 100%, 60%, 0.2)", "hsl(40, 100%, 60%, 0.2)"], // Bright golds
+    major: ["hsl(45, 100%, 60%, 0.2)", "hsl(30, 100%, 60%, 0.2)"],
+    minor: ["hsl(220, 100%, 60%, 0.2)", "hsl(250, 100%, 60%, 0.2)"],
+    dominant7: ["hsl(280, 100%, 60%, 0.2)", "hsl(320, 100%, 60%, 0.2)"],
+    diminished7: ["hsl(0, 100%, 60%, 0.2)", "hsl(350, 100%, 60%, 0.2)"],
+    halfdiminished7: ["hsl(300, 100%, 60%, 0.2)", "hsl(330, 100%, 60%, 0.2)"],
+    minor7: ["hsl(200, 100%, 60%, 0.2)", "hsl(230, 100%, 60%, 0.2)"],
+    major7: ["hsl(60, 100%, 60%, 0.2)", "hsl(40, 100%, 60%, 0.2)"],
   };
 
   return colors[voicing.quality] || colors.major;
+}
+
+function getRainbowColors(voicing: ChordVoicing | null) {
+  if (!voicing) return ["hsl(270, 100%, 65%, 0.25)", "hsl(200, 100%, 65%, 0.25)"];
+  // Derive hue from root note (0–11 → 0°–330°)
+  const rootHue = (voicing.root % 12) * 30;
+  const secondHue = (rootHue + 60) % 360;
+  return [
+    `hsl(${rootHue}, 100%, 65%, 0.25)`,
+    `hsl(${secondHue}, 100%, 65%, 0.25)`,
+  ];
 }
 
 function generateParticles(count: number): ParticleProps[] {
@@ -34,18 +46,21 @@ function generateParticles(count: number): ParticleProps[] {
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
     scale: Math.random() * 1.5 + 0.5,
-    opacity: Math.random() * 0.4 + 0.3, // Increased opacity range
+    opacity: Math.random() * 0.4 + 0.3,
   }));
 }
 
 export default function BackgroundAnimation({ voicing }: BackgroundAnimationProps) {
+  const { settings } = useSettings();
   const [particles, setParticles] = useState<ParticleProps[]>([]);
-  const colors = getChordColors(voicing);
+
+  const colors =
+    settings.colorMode === "rainbow"
+      ? getRainbowColors(voicing)
+      : getChordColors(voicing);
 
   useEffect(() => {
-    // Generate new particles on chord changes
-    const newParticles = generateParticles(20); // Increased particle count
-    setParticles(newParticles);
+    setParticles(generateParticles(20));
   }, [voicing?.quality, voicing?.root]);
 
   return (
@@ -54,33 +69,22 @@ export default function BackgroundAnimation({ voicing }: BackgroundAnimationProp
         {particles.map((particle, i) => (
           <motion.div
             key={`${i}-${voicing?.quality}-${voicing?.root}`}
-            initial={{
-              x: particle.x,
-              y: particle.y,
-              scale: 0,
-              opacity: 0,
-            }}
+            initial={{ x: particle.x, y: particle.y, scale: 0, opacity: 0 }}
             animate={{
               x: particle.x + (Math.random() - 0.5) * 100,
               y: particle.y + (Math.random() - 0.5) * 100,
               scale: particle.scale,
               opacity: particle.opacity,
             }}
-            exit={{
-              scale: 0,
-              opacity: 0,
-            }}
-            transition={{
-              duration: 2,
-              ease: "easeOut",
-            }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 2, ease: "easeOut" }}
             style={{
               position: "absolute",
-              width: "400px", // Increased size
-              height: "400px", // Increased size
+              width: "400px",
+              height: "400px",
               borderRadius: "50%",
-              background: `radial-gradient(circle, ${colors[0]}, ${colors[1]})`,
-              filter: "blur(60px)", // Increased blur
+              background: `radial-gradient(circle, ${colors[0]}, ${colors[1] ?? colors[0]})`,
+              filter: "blur(60px)",
             }}
           />
         ))}

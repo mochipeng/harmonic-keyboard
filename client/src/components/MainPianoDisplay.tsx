@@ -1,10 +1,10 @@
 import { type ChordVoicing } from "@shared/schema";
+import { useSettings } from "@/hooks/useSettings";
 
 interface MainPianoDisplayProps {
   activeVoicing: ChordVoicing | null;
 }
 
-// Black key positions and offsets
 const blackKeyPositions = [
   { left: "15%", midiOffset: 1 },
   { left: "30%", midiOffset: 3 },
@@ -13,7 +13,6 @@ const blackKeyPositions = [
   { left: "87%", midiOffset: 10 },
 ];
 
-// White key data with MIDI offsets
 const whiteKeyData = [
   { midiOffset: 0 },
   { midiOffset: 2 },
@@ -24,11 +23,25 @@ const whiteKeyData = [
   { midiOffset: 11 },
 ];
 
+// Maps note pitch class (0–11) to a hue on the color wheel
+const noteHues = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+
+function getRainbowKeyStyle(midiNote: number, isActive: boolean, isBlack: boolean) {
+  const pitchClass = midiNote % 12;
+  const hue = noteHues[pitchClass];
+  const lightness = isBlack ? 35 : 70;
+  const activeLightness = isBlack ? 55 : 85;
+  return {
+    backgroundColor: `hsl(${hue}, 85%, ${isActive ? activeLightness : lightness}%)`,
+  };
+}
+
 export default function MainPianoDisplay({ activeVoicing }: MainPianoDisplayProps) {
+  const { settings } = useSettings();
+  const isRainbow = settings.colorMode === "rainbow";
   const activeNotes = new Set(activeVoicing?.notes || []);
   const isNoteActive = (midiNote: number) => activeNotes.has(midiNote);
 
-  // Define octaves to display (3 octaves starting from C3)
   const octaves = [3, 4, 5];
 
   return (
@@ -41,13 +54,17 @@ export default function MainPianoDisplay({ activeVoicing }: MainPianoDisplayProp
               <div className="flex h-full">
                 {whiteKeyData.map(({ midiOffset }) => {
                   const midiNote = (octave + 1) * 12 + midiOffset;
+                  const active = isNoteActive(midiNote);
+                  const style = isRainbow
+                    ? getRainbowKeyStyle(midiNote, active, false)
+                    : active
+                    ? { backgroundColor: "hsl(var(--piano-active-key))" }
+                    : { backgroundColor: "hsl(var(--piano-white-key))" };
                   return (
                     <div
                       key={midiNote}
-                      className={`flex-1 flex items-end justify-center border-l last:border-r transition-colors duration-150
-                        ${isNoteActive(midiNote)
-                        ? "bg-stone-500 hover:bg-stone-400"
-                        : "bg-white hover:bg-stone-200"}`}
+                      style={style}
+                      className="flex-1 flex items-end justify-center border-l last:border-r transition-colors duration-150"
                     />
                   );
                 })}
@@ -57,14 +74,17 @@ export default function MainPianoDisplay({ activeVoicing }: MainPianoDisplayProp
               <div className="absolute top-0 left-0 h-[65%] w-full">
                 {blackKeyPositions.map(({ left, midiOffset }) => {
                   const midiNote = (octave + 1) * 12 + midiOffset;
+                  const active = isNoteActive(midiNote);
+                  const style = isRainbow
+                    ? getRainbowKeyStyle(midiNote, active, true)
+                    : active
+                    ? { backgroundColor: "hsl(var(--piano-active-key))" }
+                    : { backgroundColor: "hsl(var(--piano-black-key))" };
                   return (
                     <div
                       key={midiNote}
-                      style={{ left }}
-                      className={`absolute w-[8%] h-full -ml-[4%] rounded-b-lg shadow-lg z-10 transition-colors duration-150
-                        ${isNoteActive(midiNote)
-                        ? "bg-stone-500 hover:bg-stone-400"
-                        : "bg-gray-900 hover:bg-gray-600"}`}
+                      style={{ left, ...style }}
+                      className="absolute w-[8%] h-full -ml-[4%] rounded-b-lg shadow-lg z-10 transition-colors duration-150"
                     />
                   );
                 })}

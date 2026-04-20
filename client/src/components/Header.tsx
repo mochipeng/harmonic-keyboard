@@ -9,6 +9,7 @@ import { useEffect, useState, useRef } from "react";
 import type { ChordQualityConfig } from "@/lib/chordConfig";
 import Instrument from "@/pages/Instrument";
 import InstrumentSwitcher, { InstrumentType } from "./InstrumentSwitcher";
+import { useSettings, type ColorMode } from "@/hooks/useSettings";
 
 interface HeaderProps {
   chordQualities: ChordQualityConfig;
@@ -31,9 +32,17 @@ export default function Header({
   onInstrumentChange,
   currentInstrument,
 }: HeaderProps) {
+  const { settings, updateSettings } = useSettings();
   const [hasClickedBook, setHasClickedBook] = useState(false);
   const controls = useAnimation();
   const shouldAnimate = useRef(true);
+
+  const colorModes: { mode: ColorMode; label: string; title: string }[] = [
+    { mode: "light", label: "☀️", title: "Light" },
+    { mode: "dark", label: "🌙", title: "Dark" },
+    { mode: "rainbow", label: "🌈", title: "Rainbow" },
+    { mode: "pink", label: "🌸", title: "Pink" },
+  ];
 
   // Animation sequence for the bouncing effect
   const bounceAnimation = async () => {
@@ -85,10 +94,10 @@ export default function Header({
   };
 
   const buttonClass =
-    "text-gray-900 hover:bg-stone-500/10 transition-colors duration-150 [&>svg]:text-gray-900";
+    "text-foreground hover:bg-accent/20 transition-colors duration-150 [&>svg]:text-foreground";
 
   return (
-    <div className="flex justify-between items-center p-4 bg-[#fafafa]">
+    <div className="flex justify-between items-center p-4" style={{ backgroundColor: "hsl(var(--header-bg))" }}>
       <div>
         <InstrumentSwitcher
           onInstrumentChange={onInstrumentChange}
@@ -97,6 +106,23 @@ export default function Header({
       </div>
       <div>
         <div className="flex gap-2">
+          {/* Color mode switcher */}
+          <div className="flex gap-1 mr-2 items-center border rounded-md p-0.5" style={{ borderColor: "hsl(var(--accent))" }}>
+            {colorModes.map(({ mode, label, title }) => (
+              <button
+                key={mode}
+                title={title}
+                onClick={() => updateSettings({ colorMode: mode })}
+                className={`text-sm px-2 py-1 rounded transition-colors duration-150 ${
+                  settings.colorMode === mode
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-accent/20 text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
           <div className={buttonClass}>
             <SettingsModal
               chordQualities={chordQualities}
@@ -135,7 +161,7 @@ export default function Header({
             <motion.div
               animate={controls}
               initial={{ y: 0, rotate: 0 }}
-              className="[&>svg]:text-gray-900"
+              className="[&>svg]:text-foreground"
             >
               {isTutorialOpen ? (
                 <BookOpen className="h-5 w-5" />

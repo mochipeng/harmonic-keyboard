@@ -4,10 +4,13 @@ import type { QualityKeyMapping } from "@shared/schema";
 import { soundPresets } from "@/lib/audio";
 import { getQualityKeyMappings, updateQualityKeyMappings } from "@/lib/keyboardMapping";
 
+export type ColorMode = "light" | "dark" | "rainbow" | "pink";
+
 interface GlobalSettings {
   soundSettings: SynthSettings;
   currentPreset: SoundPresetName | "custom";
   keyMappings: QualityKeyMapping[];
+  colorMode: ColorMode;
 }
 
 // Initial state based on defaults
@@ -15,6 +18,7 @@ const initialSettings: GlobalSettings = {
   soundSettings: soundPresets["Warm Piano"],
   currentPreset: "Warm Piano",
   keyMappings: getQualityKeyMappings(),
+  colorMode: "light",
 };
 
 export function useSettings() {
