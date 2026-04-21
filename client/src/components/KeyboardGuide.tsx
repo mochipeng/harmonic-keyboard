@@ -24,7 +24,7 @@ function KeyHint({ keyLabel, description, isActive }: KeyHintProps) {
         className={`w-10 h-10 flex items-center justify-center rounded-lg text-lg transition-colors duration-150
           ${
             isActive
-              ? "bg-primary text-primary-foreground"
+              ? "bg-blue-500 text-white"
               : "bg-transparent border border-border text-foreground hover:bg-accent/20"
           }`}
       >

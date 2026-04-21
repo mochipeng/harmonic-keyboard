@@ -153,7 +153,7 @@ const ChordPresets: FC<ChordPresetsProps> = ({ className = "" }) => {
             variant={currentProgression === progression.name ? "default" : "outline"}
             size="sm"
             className={`
-              ${currentProgression === progression.name ? "bg-indigo-600 hover:bg-indigo-700" : ""}
+              ${currentProgression === progression.name ? "bg-blue-500 hover:bg-blue-600" : ""}
               transition-all duration-200
             `}
           >

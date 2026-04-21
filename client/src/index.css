@@ -21,7 +21,7 @@
     --piano-white-key-hover: 30 10% 88%;
     --piano-black-key: 0 0% 11%;
     --piano-black-key-hover: 0 0% 40%;
-    --piano-active-key: 25 10% 40%;
+    --piano-active-key: 210 80% 55%;
   }
 
   [data-theme="dark"] {
@@ -42,7 +42,7 @@
     --piano-white-key-hover: 220 10% 32%;
     --piano-black-key: 220 15% 5%;
     --piano-black-key-hover: 220 10% 18%;
-    --piano-active-key: 250 70% 55%;
+    --piano-active-key: 210 80% 60%;
   }
 
   [data-theme="pink"] {
@@ -63,7 +63,7 @@
     --piano-white-key-hover: 330 60% 85%;
     --piano-black-key: 330 50% 25%;
     --piano-black-key-hover: 330 50% 35%;
-    --piano-active-key: 330 80% 55%;
+    --piano-active-key: 210 80% 55%;
   }
 
   [data-theme="rainbow"] {
