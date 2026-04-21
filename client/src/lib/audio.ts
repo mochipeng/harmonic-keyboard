@@ -241,12 +241,13 @@ export const soundPresets = {
 
 export type SoundPresetName = keyof typeof soundPresets;
 
-let synth: Tone.PolySynth;
-let reverb: Tone.Reverb;
-let chorus: Tone.Chorus;
-let eq: Tone.EQ3;
-let compressor: Tone.Compressor;
-let distortion: Tone.Distortion;
+let synth: Tone.PolySynth | null = null;
+let eq: Tone.EQ3 | null = null;
+let reverb: Tone.Reverb | null = null;
+let chorus: Tone.Chorus | null = null;
+let compressor: Tone.Compressor | null = null;
+let distortion: Tone.Distortion | null = null;
+let sustainEnabled = false;
 
 const defaultSettings: SynthSettings = soundPresets["Warm Piano"];
 
@@ -332,11 +333,25 @@ export function updateSynthSettings(settings: Partial<SynthSettings>): void {
   }
 }
 
-export function playChord(voicing: ChordVoicing | null) {
+export function setSustain(enabled: boolean): void {
+  sustainEnabled = enabled;
+  // If turning off sustain, release any held notes
+  if (!enabled && synth) {
+    synth.releaseAll();
+  }
+}
+
+export function getSustain(): boolean {
+  return sustainEnabled;
+}
+
+export function playChord(voicing: ChordVoicing | null, forceRelease = false) {
   if (!synth) return;
 
-  // Stop all currently playing notes
-  synth.releaseAll();
+  // Stop all currently playing notes (unless sustain is on and not forced)
+  if (!sustainEnabled || forceRelease) {
+    synth.releaseAll();
+  }
 
   // If no voicing is provided or no notes to play, return
   if (!voicing || !voicing.notes.length) {
